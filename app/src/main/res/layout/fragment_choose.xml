@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ChooseFragment"
+    android:id="@+id/container">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:background="@drawable/ic_baseline_search_24"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"/>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:layout_marginTop="100dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerCountries"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:spanCount="3"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/country_item"/>
+    </FrameLayout>
+
+
+</FrameLayout>
