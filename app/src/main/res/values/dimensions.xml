@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="value100">100dp</dimen>
+    <dimen name="value150">150dp</dimen>
+    <dimen name="value520">520dp</dimen>
+    <dimen name="value30">30dp</dimen>
+    <dimen name="value215">215dp</dimen>
+    <dimen name="value200">200dp</dimen>
+    <dimen name="value50">50dp</dimen>
+    <dimen name="value8">8dp</dimen>
+    <dimen name="value1">1dp</dimen>
+    <dimen name="value10">10dp</dimen>
+    <dimen name="value0">0dp</dimen>
+</resources>
