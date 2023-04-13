@@ -1,4 +1,4 @@
-package com.example.allholidayscalendar
+package com.example.allholidayscalendar.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

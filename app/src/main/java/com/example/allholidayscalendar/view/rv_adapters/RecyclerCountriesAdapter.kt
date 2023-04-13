@@ -1,15 +1,15 @@
-package com.example.allholidayscalendar
+package com.example.allholidayscalendar.view.rv_adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import androidx.recyclerview.widget.RecyclerView
+import com.example.allholidayscalendar.Countries
+import com.example.allholidayscalendar.view.rv_viewholders.CountriesViewHolder
 import com.example.allholidayscalendar.databinding.CountryItemBinding
 
 
 //в параметр передаём слушатель, чтобы мы потом могли обрабатывать нажатие
-class RecyclerCountriesAdapter(var data:List<Countries>, private val clickListener:OnItemClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class RecyclerCountriesAdapter(var data:List<Countries>, private val clickListener: OnItemClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //тут храним список элементов для ресайклер вью
     val itemsCountries = mutableListOf<Countries>()

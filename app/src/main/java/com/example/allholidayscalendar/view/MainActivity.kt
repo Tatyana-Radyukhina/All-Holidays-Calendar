@@ -1,18 +1,16 @@
-package com.example.allholidayscalendar
+package com.example.allholidayscalendar.view
 
 import android.animation.ObjectAnimator
 import android.app.DatePickerDialog
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.core.view.children
-import androidx.transition.*
+import com.example.allholidayscalendar.R
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
-import kotlinx.coroutines.delay
+import com.example.allholidayscalendar.view.fragments.ChooseFragment
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -59,9 +57,6 @@ class MainActivity : AppCompatActivity() {
             },
                 currentYear, currentMonth, currentDay).show()
         }
-
-
-
 
     }
 
