@@ -11,4 +11,6 @@
     <dimen name="value1">1dp</dimen>
     <dimen name="value10">10dp</dimen>
     <dimen name="value0">0dp</dimen>
+    <dimen name="value500">500dp</dimen>
+    <dimen name="value600">600dp</dimen>
 </resources>
