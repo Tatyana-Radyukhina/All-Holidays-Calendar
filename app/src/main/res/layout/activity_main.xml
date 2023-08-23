@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/halloween"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view2"
@@ -58,7 +58,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/christmas"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view3"
@@ -72,7 +72,7 @@
             app:layout_constraintTop_toTopOf="parent"
             android:src="@drawable/brazilcarnaval"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view4"
@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view1"
             android:src="@drawable/octoberfest"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view5"
@@ -100,7 +100,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view2"
             android:src="@drawable/chinesenewyear"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view6"
@@ -114,7 +114,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view3"
             android:src="@drawable/newyear"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view7"
@@ -128,7 +128,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view4"
             android:src="@drawable/dayofdead"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view8"
@@ -142,7 +142,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view5"
             android:src="@drawable/japan"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
         <ImageView
             android:id="@+id/view9"
@@ -156,7 +156,7 @@
             app:layout_constraintTop_toBottomOf="@+id/view6"
             android:src="@drawable/spain"
             android:scaleType="centerCrop"
-            />
+            android:contentDescription="TODO" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -207,6 +207,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardview"
         android:gravity="center"/>
+
+    <androidx.appcompat.widget.Toolbar
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:id="@+id/CustomToolbar"
+        android:background="@color/teal_700"
+        >
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/CustomSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.SearchView>
+
+    </androidx.appcompat.widget.Toolbar>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,15 +2,18 @@ package com.example.allholidayscalendar.view
 
 import android.animation.ObjectAnimator
 import android.app.DatePickerDialog
-import android.os.Build
+import android.app.SearchManager
+import android.database.Cursor
+import android.database.MatrixCursor
 import android.os.Bundle
+import android.provider.BaseColumns
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import com.example.allholidayscalendar.R
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
-import com.example.allholidayscalendar.view.fragments.ChooseFragment
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,12 +32,67 @@ class MainActivity : AppCompatActivity() {
             start()
         }
 
+        val suggestions =listOf("USA","Australia","England", "New Zealand")
 
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_placeholder, ChooseFragment())
-            .addToBackStack(null)
-            .commit()
+        val searchView = binding.CustomSearchView
+        val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
+        val to = intArrayOf(R.id.searchItemID)
+
+        val cursorAdapter = androidx.cursoradapter.widget.SimpleCursorAdapter(
+            applicationContext,
+            R.layout.suggestion_item_layout,
+            null,
+            from,
+            to,
+            androidx.cursoradapter.widget.CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+        )
+        binding.CustomSearchView.suggestionsAdapter = cursorAdapter
+
+        binding.CustomSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val cursor =
+                    MatrixCursor(arrayOf(BaseColumns._ID, SearchManager.SUGGEST_COLUMN_TEXT_1))
+                newText?.let {
+
+                    suggestions.forEachIndexed { index, suggestion ->
+                        if (suggestion.contains(newText, true))
+                            cursor.addRow(arrayOf(index, suggestion))
+                    }
+                }
+
+                cursorAdapter.changeCursor(cursor)
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+        })
+
+        binding.CustomSearchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+            override fun onSuggestionClick(position: Int): Boolean {
+                val cursor = binding.CustomSearchView.suggestionsAdapter.getItem(position) as Cursor
+                val selection =
+                    cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
+                binding.CustomSearchView.setQuery(selection, false)
+
+                // Do whatever you want with selection text
+
+                return true
+            }
+
+            override fun onSuggestionSelect(position: Int): Boolean {
+                return false
+            }
+        })
+
+
+
+
+        //Getting instance of search Widgets
+//        val searchViewWidget:SearchView = findViewById<SearchView>(R.id.CustomSearchView)
+//        val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
+//        searchViewWidget.setSearchableInfo(searchManager.getSearchableInfo(componentName))
 
 
 
@@ -46,19 +104,39 @@ class MainActivity : AppCompatActivity() {
                 binding.dateText.text = date
 
 
-                    val transaction = supportFragmentManager.beginTransaction()
-                    val frag2 = ChooseFragment()
-                    frag2.arguments = bundleOf("token" to date)
-
-                    transaction.replace(R.id.master_layout, frag2)
-                    transaction.addToBackStack(null)
-                    transaction.commit()
+//                    val transaction = supportFragmentManager.beginTransaction()
+//                    val frag2 = ChooseFragment()
+//                    frag2.arguments = bundleOf("token" to date)
+//
+//                    transaction.replace(R.id.master_layout, frag2)
+//                    transaction.addToBackStack(null)
+//                    transaction.commit()
 
             },
                 currentYear, currentMonth, currentDay).show()
         }
 
     }
+
+
+
+
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        menuInflater.inflate(R.menu.search, menu)
+//
+//        // Get the SearchView and set the searchable configuration
+//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+//        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
+//            // Assumes current activity is the searchable activity
+//            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+//            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
+//        }
+//
+//        return true
+//    }
+
+
+
 
     val calendar = Calendar.getInstance()
     val currentYear = calendar.get(Calendar.YEAR)
@@ -68,15 +146,142 @@ class MainActivity : AppCompatActivity() {
 
 
 
-//        val scene0 = Scene.getSceneForLayout(binding.sceneroot, R.layout.activity_main, this)
-//        val transitionManager = TransitionManager()
-//        transitionManager.setTransition(scene0, Explode().apply{
-//            duration = 1500
-//        })
-//        transitionManager.transitionTo(scene0)
 
-//        TransitionManager.beginDelayedTransition(binding.maincontainer, Fade())
-//        binding.maincontainer.children.forEach { it.translationX += 10 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    private val suggestions = arrayOf(
+//        "item1", "item2",
+//        "item3", "item4",
+//        "item5", "item6",
+//        "item7", "item8"
+//    )
+
+//    private lateinit var mAdapter: SimpleCursorAdapter
+
+
+
+
+
+
+
+
+
+
+//        val menuItem = menu?.findItem(R.id.search)
+//
+//        val searchView = menuItem?.actionView as SearchView
+
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                if (newText != null) {
+//                    populateAdapter(newText)
+//                }
+//                return false
+//            }
+//        })
+//    }
+
+//        searchView.suggestionsAdapter = mAdapter
+//
+//        searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
+//            override fun onSuggestionSelect(position: Int): Boolean {
+//                return true
+//            }
+//
+//            override fun onSuggestionClick(position: Int): Boolean {
+//                val cursor: Cursor = mAdapter!!.getItem(position) as Cursor
+//                val txt: String = cursor.getString(cursor.getColumnIndexOrThrow("items"))
+//                searchView.setQuery(txt, true)
+//                searchView.clearFocus()
+//                return true
+//            }
+//        })
+//
+//
+//        return super.onCreateOptionsMenu(menu)
+//    }
+
+
+//    fun populateAdapter(query: String) {
+//        val c = MatrixCursor(arrayOf(BaseColumns._ID, "items"))
+//        for (i in suggestions.indices) {
+//            if (suggestions[i].lowercase()
+//                    .startsWith(query.lowercase())
+//            ) c.addRow(arrayOf(i, suggestions[i]))
+//        }
+//        mAdapter!!.changeCursor(c)
+//    }
+
+
+
+
+
+
+
+
+
+//        val from = arrayOf("items")
+//        val to = intArrayOf(android.R.id.text2)
+//
+//        mAdapter = SimpleCursorAdapter(
+//            this,
+//            R.layout.item_search,
+//            null,
+//            from,
+//            to,
+//            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
+//        )
+
+
+
+
+
+
+
 
 
 
