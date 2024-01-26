@@ -10,10 +10,17 @@ import android.provider.BaseColumns
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
-import androidx.core.os.bundleOf
+import com.example.allholidayscalendar.CalendarificInterface
+import com.example.allholidayscalendar.HolidaysDTO
 import com.example.allholidayscalendar.R
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.Callback
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +32,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        service.getHolidays("8f630c135b1ca1993ce7dd7ce65975f0b9d23966","rs", 2019).enqueue(object : Callback<HolidaysDTO> {
+            override fun onResponse(call: Call<HolidaysDTO>, response: Response<HolidaysDTO>) {
+                println("!!!" + response.body())
+            }
+
+            override fun onFailure(call: Call<HolidaysDTO>, t: Throwable) {
+                println("ошибка")
+                t.printStackTrace()
+            }
+        })
+
 
 
         ObjectAnimator.ofFloat(binding.sceneRoot, View.SCALE_X, 1F, 0F).apply {
@@ -117,6 +136,25 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://calendarific.com/api/v2/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+//    interface CalendarificInterface {
+//        @GET("/holidays")
+//        fun getHolidays(
+//            @Query("api_key") apiKey: String,
+//            @Query("country") country: String,
+//            @Query("year") year: Int,
+//
+//        ): Call<HolidaysDTO>
+//    }
+
+
+    val service = retrofit.create(CalendarificInterface::class.java)
+
 
 
 
