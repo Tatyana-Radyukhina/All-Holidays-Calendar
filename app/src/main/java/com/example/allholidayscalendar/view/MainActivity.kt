@@ -1,19 +1,25 @@
 package com.example.allholidayscalendar.view
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.SearchManager
 import android.database.Cursor
 import android.database.MatrixCursor
+import android.os.Build
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.allholidayscalendar.CalendarificInterface
 import com.example.allholidayscalendar.HolidaysDTO
 import com.example.allholidayscalendar.R
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
+import com.example.allholidayscalendar.view.fragments.ResultFragment
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Callback
@@ -26,34 +32,32 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    lateinit var selection: String
+    lateinit var valDay:Any
+    lateinit var valMonth:Any
+    lateinit var valYear:Any
 
     //в этом методе происходит инициализация активити
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        service.getHolidays("8f630c135b1ca1993ce7dd7ce65975f0b9d23966","rs", 2019).enqueue(object : Callback<HolidaysDTO> {
-            override fun onResponse(call: Call<HolidaysDTO>, response: Response<HolidaysDTO>) {
-                println("!!!" + response.body())
-            }
 
-            override fun onFailure(call: Call<HolidaysDTO>, t: Throwable) {
-                println("ошибка")
-                t.printStackTrace()
-            }
-        })
-
-
-
-        ObjectAnimator.ofFloat(binding.sceneRoot, View.SCALE_X, 1F, 0F).apply {
-            startDelay = 5000
-            start()
+        binding.datePicker.setOnClickListener {
+            DatePickerDialog(this@MainActivity, { view, year, month, dayOfMonth ->
+                valDay = dayOfMonth
+                valMonth = month
+                valYear = year},
+                currentYear, currentMonth, currentDay).show()
         }
 
-        val suggestions =listOf("USA","Australia","England", "New Zealand")
 
-        val searchView = binding.CustomSearchView
+        val suggestions =listOf("Afghanistan/af", "Albania/al", "Algeria/dz", "Andorra/ad",
+            "Angola/ao", "Antigua and Barbuda/ag", "Argentina/ar",
+            "USA","Australia","England", "New Zealand", "Serbia", "Serbia/rs")
+
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.searchItemID)
 
@@ -91,10 +95,10 @@ class MainActivity : AppCompatActivity() {
         binding.CustomSearchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
             override fun onSuggestionClick(position: Int): Boolean {
                 val cursor = binding.CustomSearchView.suggestionsAdapter.getItem(position) as Cursor
-                val selection =
+                selection =
                     cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
                 binding.CustomSearchView.setQuery(selection, false)
-
+                selection.split("/")
                 // Do whatever you want with selection text
 
                 return true
@@ -105,82 +109,73 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
-
-
-        //Getting instance of search Widgets
-//        val searchViewWidget:SearchView = findViewById<SearchView>(R.id.CustomSearchView)
-//        val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
-//        searchViewWidget.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-
-
-
-        //создаю календарь
-
-        binding.datePicker.setOnClickListener {
-            DatePickerDialog(this, { view, year, month, dayOfMonth ->
-                val date = "$year $month $dayOfMonth"
-                binding.dateText.text = date
-
-
-//                    val transaction = supportFragmentManager.beginTransaction()
-//                    val frag2 = ChooseFragment()
-//                    frag2.arguments = bundleOf("token" to date)
-//
-//                    transaction.replace(R.id.master_layout, frag2)
-//                    transaction.addToBackStack(null)
-//                    transaction.commit()
-
-            },
-                currentYear, currentMonth, currentDay).show()
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BASIC
         }
 
-    }
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
 
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://calendarific.com/api/v2/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://calendarific.com/api/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
 
-//    interface CalendarificInterface {
-//        @GET("/holidays")
-//        fun getHolidays(
-//            @Query("api_key") apiKey: String,
-//            @Query("country") country: String,
-//            @Query("year") year: Int,
-//
-//        ): Call<HolidaysDTO>
-//    }
+        val service = retrofit.create(CalendarificInterface::class.java)
+
+        binding.sendInTofrag.setOnClickListener {
+            service.getHolidays(
+                "",
+                country = (selection.substringAfter("/")),
+                year = (valYear as Int),
+                day = (valDay as Int),
+                month = (valMonth as Int +1)
+            ).enqueue(object :
+                Callback<HolidaysDTO> {
+                @SuppressLint("SuspiciousIndentation", "CommitTransaction")
+                override fun onResponse(call: Call<HolidaysDTO>, response: Response<HolidaysDTO>) {
+                    val b = response.body()
+                    if (b != null) {
+                        println("!!! $b.response.holidays[0].date.datetime.year.toString()")
+                        val resultFragmentTransaction = supportFragmentManager
+                        var rFragmentTransaction = resultFragmentTransaction.beginTransaction()
+                        val bundle = Bundle()
+                        bundle.putString("input", b.response.holidays[0].description)
+                        val resultFragment = ResultFragment()
+                        resultFragment.arguments = bundle
+                        rFragmentTransaction.add(R.id.fragment_placeholder, resultFragment)
+                            .commit()
+                        binding.dateText.text = b.response.holidays[0].date.datetime.year.toString()
+                    }
+                }
+
+                override fun onFailure(call: Call<HolidaysDTO>, t: Throwable) {
+                    println("ошибка")
+                    t.printStackTrace()
+                }
+            })
+
+        }
 
 
-    val service = retrofit.create(CalendarificInterface::class.java)
 
 
+        ObjectAnimator.ofFloat(binding.sceneRoot, View.SCALE_X, 1F, 0F).apply {
+            startDelay = 5000
+            start()
+        }
 
 
-
-//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-//        menuInflater.inflate(R.menu.search, menu)
-//
-//        // Get the SearchView and set the searchable configuration
-//        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-//        (menu?.findItem(R.id.search)?.actionView as SearchView).apply {
-//            // Assumes current activity is the searchable activity
-//            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-//            setIconifiedByDefault(false) // Do not iconify the widget; expand it by default
-//        }
-//
-//        return true
-//    }
-
+}
 
 
 
     val calendar = Calendar.getInstance()
     val currentYear = calendar.get(Calendar.YEAR)
     val currentMonth = calendar.get(Calendar.MONTH)
-    val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
-}
+    val currentDay = calendar.get(Calendar.DAY_OF_MONTH)}
 
 
 

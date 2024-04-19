@@ -18,13 +18,21 @@ class ResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentResultBinding.inflate(inflater, container, false)
+        _binding = FragmentResultBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val bundle = arguments
+        val message = bundle!!.getString("input")
+        binding.description.text = arguments?.getString("input")
     }
+
+//    override fun onDestroy() {
+//        _binding = null
+//        super.onDestroy()
+//    }
 
 }
