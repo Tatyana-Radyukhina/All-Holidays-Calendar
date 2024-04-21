@@ -1,11 +1,13 @@
-package com.example.allholidayscalendar.view.fragments
+package com.example.allholidayscalendar.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.allholidayscalendar.databinding.FragmentResultBinding
+import com.example.allholidayscalendar.viewModels.ResultFragmentViewModel
 
 
 class ResultFragment : Fragment() {
@@ -25,14 +27,17 @@ class ResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val bundle = arguments
-        val message = bundle!!.getString("input")
-        binding.description.text = arguments?.getString("input")
+        val resultFragmentViewModel: ResultFragmentViewModel by activityViewModels()
+
+        resultFragmentViewModel.resultFromServer.observe(viewLifecycleOwner){
+
+            binding.description.text = it
+        }
     }
 
-//    override fun onDestroy() {
-//        _binding = null
-//        super.onDestroy()
-//    }
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
 
 }
