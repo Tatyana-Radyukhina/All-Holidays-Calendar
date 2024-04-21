@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView
 import com.example.allholidayscalendar.CalendarificInterface
 import com.example.allholidayscalendar.HolidaysDTO
 import com.example.allholidayscalendar.R
+import com.example.allholidayscalendar.data.apiKey
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
 import com.example.allholidayscalendar.view.fragments.ResultFragment
 import okhttp3.OkHttpClient
@@ -127,7 +128,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.sendInTofrag.setOnClickListener {
             service.getHolidays(
-                "",
+                apiKey = apiKey.api,
                 country = (selection.substringAfter("/")),
                 year = (valYear as Int),
                 day = (valDay as Int),
