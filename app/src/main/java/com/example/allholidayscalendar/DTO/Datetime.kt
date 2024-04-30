@@ -1,4 +1,4 @@
-package com.example.allholidayscalendar
+package com.example.allholidayscalendar.DTO
 
 data class Datetime(
     val day: Int,

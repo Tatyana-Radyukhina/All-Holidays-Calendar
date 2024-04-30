@@ -1,7 +1,6 @@
 package com.example.allholidayscalendar.view
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.SearchManager
 import android.database.Cursor
@@ -10,24 +9,13 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.View
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import com.example.allholidayscalendar.CalendarificInterface
-import com.example.allholidayscalendar.HolidaysDTO
 import com.example.allholidayscalendar.R
-import com.example.allholidayscalendar.data.apiKey
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
-import com.example.allholidayscalendar.view.fragments.ResultFragment
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Response
-import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import com.example.allholidayscalendar.viewModels.ResultFragmentViewModel
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -38,13 +26,18 @@ class MainActivity : AppCompatActivity() {
     lateinit var valMonth:Any
     lateinit var valYear:Any
 
-    //в этом методе происходит инициализация активити
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val resultFragmentViewModel: ResultFragmentViewModel by viewModels()
+
+        ObjectAnimator.ofFloat(binding.sceneRoot, View.SCALE_X, 1F, 0F).apply {
+            startDelay = 5000
+            start()
+        }
 
         binding.datePicker.setOnClickListener {
             DatePickerDialog(this@MainActivity, { view, year, month, dayOfMonth ->
@@ -100,7 +93,6 @@ class MainActivity : AppCompatActivity() {
                     cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
                 binding.CustomSearchView.setQuery(selection, false)
                 selection.split("/")
-                // Do whatever you want with selection text
 
                 return true
             }
@@ -110,73 +102,23 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BASIC
-        }
-
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://calendarific.com/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-
-        val service = retrofit.create(CalendarificInterface::class.java)
 
         binding.sendInTofrag.setOnClickListener {
-            service.getHolidays(
-                apiKey = apiKey.api,
-                country = (selection.substringAfter("/")),
-                year = (valYear as Int),
-                day = (valDay as Int),
-                month = (valMonth as Int +1)
-            ).enqueue(object :
-                Callback<HolidaysDTO> {
-                @SuppressLint("SuspiciousIndentation", "CommitTransaction")
-                override fun onResponse(call: Call<HolidaysDTO>, response: Response<HolidaysDTO>) {
-                    val b = response.body()
-                    if (b != null) {
-                        println("!!! $b.response.holidays[0].date.datetime.year.toString()")
-                        val resultFragmentTransaction = supportFragmentManager
-                        var rFragmentTransaction = resultFragmentTransaction.beginTransaction()
-                        val bundle = Bundle()
-                        bundle.putString("input", b.response.holidays[0].description)
-                        val resultFragment = ResultFragment()
-                        resultFragment.arguments = bundle
-                        rFragmentTransaction.add(R.id.fragment_placeholder, resultFragment)
-                            .commit()
-                        binding.dateText.text = b.response.holidays[0].date.datetime.year.toString()
-                    }
-                }
-
-                override fun onFailure(call: Call<HolidaysDTO>, t: Throwable) {
-                    println("ошибка")
-                    t.printStackTrace()
-                }
-            })
+            resultFragmentViewModel.getInfo()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_placeholder, ResultFragment())
+                .addToBackStack(null)
+                .commit()
 
         }
-
-
-
-
-        ObjectAnimator.ofFloat(binding.sceneRoot, View.SCALE_X, 1F, 0F).apply {
-            startDelay = 5000
-            start()
-        }
-
-
 }
 
 
 
-    val calendar = Calendar.getInstance()
-    val currentYear = calendar.get(Calendar.YEAR)
-    val currentMonth = calendar.get(Calendar.MONTH)
-    val currentDay = calendar.get(Calendar.DAY_OF_MONTH)}
+    private val calendar = Calendar.getInstance()
+    private val currentYear = calendar.get(Calendar.YEAR)
+    private val currentMonth = calendar.get(Calendar.MONTH)
+    private val currentDay = calendar.get(Calendar.DAY_OF_MONTH)}
 
 
 
@@ -201,114 +143,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    private val suggestions = arrayOf(
-//        "item1", "item2",
-//        "item3", "item4",
-//        "item5", "item6",
-//        "item7", "item8"
-//    )
-
-//    private lateinit var mAdapter: SimpleCursorAdapter
-
-
-
-
-
-
-
-
-
-
-//        val menuItem = menu?.findItem(R.id.search)
-//
-//        val searchView = menuItem?.actionView as SearchView
-
-//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                if (newText != null) {
-//                    populateAdapter(newText)
-//                }
-//                return false
-//            }
-//        })
-//    }
-
-//        searchView.suggestionsAdapter = mAdapter
-//
-//        searchView.setOnSuggestionListener(object : SearchView.OnSuggestionListener {
-//            override fun onSuggestionSelect(position: Int): Boolean {
-//                return true
-//            }
-//
-//            override fun onSuggestionClick(position: Int): Boolean {
-//                val cursor: Cursor = mAdapter!!.getItem(position) as Cursor
-//                val txt: String = cursor.getString(cursor.getColumnIndexOrThrow("items"))
-//                searchView.setQuery(txt, true)
-//                searchView.clearFocus()
-//                return true
-//            }
-//        })
-//
-//
-//        return super.onCreateOptionsMenu(menu)
-//    }
-
-
-//    fun populateAdapter(query: String) {
-//        val c = MatrixCursor(arrayOf(BaseColumns._ID, "items"))
-//        for (i in suggestions.indices) {
-//            if (suggestions[i].lowercase()
-//                    .startsWith(query.lowercase())
-//            ) c.addRow(arrayOf(i, suggestions[i]))
-//        }
-//        mAdapter!!.changeCursor(c)
-//    }
-
-
-
-
-
-
-
-
-
-//        val from = arrayOf("items")
-//        val to = intArrayOf(android.R.id.text2)
-//
-//        mAdapter = SimpleCursorAdapter(
-//            this,
-//            R.layout.item_search,
-//            null,
-//            from,
-//            to,
-//            CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER
-//        )
 
 
 
