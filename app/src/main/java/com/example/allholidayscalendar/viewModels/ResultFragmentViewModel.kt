@@ -24,13 +24,16 @@ class ResultFragmentViewModel: ViewModel() {
 
     private val service = retrofit.create(CalendarificInterface::class.java)
 
-    fun getInfo() {
+
+
+
+    fun getInfo(getCountry:String, getYear:Int, getDay:Int, getMonth:Int) {
         service.getHolidays(
             apiKey = ApiKey.api,
-            "rs",
-            2019,
-            5,
-            6
+            country = getCountry,
+            year = getYear,
+            day = getDay,
+            month = getMonth+1
         ).enqueue(object :
             Callback<HolidaysDTO> {
             @SuppressLint("SuspiciousIndentation", "CommitTransaction")

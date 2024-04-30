@@ -16,7 +16,11 @@ import androidx.appcompat.widget.SearchView
 import com.example.allholidayscalendar.R
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
 import com.example.allholidayscalendar.viewModels.ResultFragmentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.EmptyCoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         val resultFragmentViewModel: ResultFragmentViewModel by viewModels()
 
@@ -92,27 +97,33 @@ class MainActivity : AppCompatActivity() {
                 selection =
                     cursor.getString(cursor.getColumnIndexOrThrow(SearchManager.SUGGEST_COLUMN_TEXT_1))
                 binding.CustomSearchView.setQuery(selection, false)
-                selection.split("/")
 
                 return true
             }
 
             override fun onSuggestionSelect(position: Int): Boolean {
+
                 return false
             }
         })
 
 
+
         binding.sendInTofrag.setOnClickListener {
-            resultFragmentViewModel.getInfo()
-            supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_placeholder, ResultFragment())
-                .addToBackStack(null)
-                .commit()
 
+            CoroutineScope(EmptyCoroutineContext).launch {
+                resultFragmentViewModel.getInfo(selection.substringAfter("/"), valYear as Int, valDay as Int, valMonth as Int)
+                delay(1000)
+                CoroutineScope(EmptyCoroutineContext).launch {
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.fragment_placeholder, ResultFragment())
+                        .addToBackStack(null)
+                        .commit()
+                }
+
+            }
         }
-}
-
+    }
 
 
     private val calendar = Calendar.getInstance()
