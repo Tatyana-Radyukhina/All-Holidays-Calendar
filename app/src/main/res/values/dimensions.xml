@@ -13,4 +13,5 @@
     <dimen name="value0">0dp</dimen>
     <dimen name="value500">500dp</dimen>
     <dimen name="value600">600dp</dimen>
+    <dimen name="value400">400dp</dimen>
 </resources>

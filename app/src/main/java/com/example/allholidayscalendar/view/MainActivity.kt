@@ -1,6 +1,7 @@
 package com.example.allholidayscalendar.view
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.SearchManager
 import android.database.Cursor
@@ -9,14 +10,18 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.BaseColumns
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import com.example.allholidayscalendar.R
+import com.example.allholidayscalendar.data.Country
 import com.example.allholidayscalendar.databinding.ActivityMainBinding
 import com.example.allholidayscalendar.viewModels.ResultFragmentViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -25,11 +30,12 @@ import kotlin.coroutines.EmptyCoroutineContext
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    lateinit var selection: String
-    lateinit var valDay:Any
-    lateinit var valMonth:Any
-    lateinit var valYear:Any
+    private lateinit var selection: String
+    private lateinit var valDay:Any
+    private lateinit var valMonth:Any
+    private lateinit var valYear:Any
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +45,12 @@ class MainActivity : AppCompatActivity() {
 
         val resultFragmentViewModel: ResultFragmentViewModel by viewModels()
 
+
         ObjectAnimator.ofFloat(binding.sceneRoot, View.SCALE_X, 1F, 0F).apply {
-            startDelay = 5000
-            start()
+                startDelay = 5000
+                start()
         }
+
 
         binding.datePicker.setOnClickListener {
             DatePickerDialog(this@MainActivity, { view, year, month, dayOfMonth ->
@@ -53,9 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val suggestions =listOf("Afghanistan/af", "Albania/al", "Algeria/dz", "Andorra/ad",
-            "Angola/ao", "Antigua and Barbuda/ag", "Argentina/ar",
-            "USA","Australia","England", "New Zealand", "Serbia", "Serbia/rs")
+        val suggestions = Country.suggestion
 
         val from = arrayOf(SearchManager.SUGGEST_COLUMN_TEXT_1)
         val to = intArrayOf(R.id.searchItemID)
@@ -109,10 +115,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        binding.sendInTofrag.setOnClickListener {
+        binding.push.setOnClickListener {
 
-            CoroutineScope(EmptyCoroutineContext).launch {
-                resultFragmentViewModel.getInfo(selection.substringAfter("/"), valYear as Int, valDay as Int, valMonth as Int)
+            val exceptionHandler = CoroutineExceptionHandler{
+                coroutineContext, throwable ->
+                makeToast()
+            }
+
+            CoroutineScope(Dispatchers.Main + exceptionHandler).launch {
+                resultFragmentViewModel.getInfo(selection.substringAfter("/"), valYear as Int, valDay as Int, valMonth as Int )
                 delay(1000)
                 CoroutineScope(EmptyCoroutineContext).launch {
                     supportFragmentManager.beginTransaction()
@@ -120,9 +131,12 @@ class MainActivity : AppCompatActivity() {
                         .addToBackStack(null)
                         .commit()
                 }
-
             }
         }
+    }
+
+    private fun makeToast(){
+        Toast.makeText(this, "You did not specify all required values. Please indicate country and date", Toast.LENGTH_LONG).show()
     }
 
 
