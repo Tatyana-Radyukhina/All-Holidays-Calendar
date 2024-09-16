@@ -5,9 +5,19 @@
     android:id="@+id/master_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.MainActivity">
+    tools:context=".view.MainActivity"
+    android:background="#D5BFFB">
 
-    <include layout="@layout/b_scene"/>
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/CustomSearchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/CustomToolbar"
+        app:defaultQueryHint="@string/search_hint"
+        app:iconifiedByDefault="false"
+        android:background="@color/white">
+    </androidx.appcompat.widget.SearchView>
 
     <FrameLayout
         android:id="@+id/fragment_placeholder"
@@ -21,16 +31,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:id="@+id/scene_root"
-        android:layout_height="320dp"
+        android:layout_height="520dp"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/guideline1"
+        android:layout_marginTop="@dimen/value50"
         android:orientation="vertical"
         android:layoutAnimation="@anim/layout_animation">
-
-
 
         <ImageView
             android:id="@+id/view1"
@@ -42,9 +51,9 @@
             app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/value50"
             android:src="@drawable/halloween"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view2"
@@ -52,13 +61,13 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toTopOf="@+id/view5"
             app:layout_constraintEnd_toStartOf="@+id/view3"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/view1"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
+            android:layout_marginTop="@dimen/value50"
             android:src="@drawable/christmas"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view3"
@@ -66,13 +75,13 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toTopOf="@+id/view6"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/view2"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
+            android:layout_marginTop="@dimen/value50"
             android:src="@drawable/brazilcarnaval"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view4"
@@ -80,13 +89,12 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toTopOf="@+id/view7"
             app:layout_constraintEnd_toStartOf="@+id/view5"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view1"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
             android:src="@drawable/octoberfest"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view5"
@@ -94,13 +102,12 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toTopOf="@+id/view8"
             app:layout_constraintEnd_toStartOf="@+id/view3"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/view4"
             app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
             android:src="@drawable/chinesenewyear"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view6"
@@ -108,13 +115,12 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toTopOf="@+id/view9"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/view5"
             app:layout_constraintTop_toBottomOf="@+id/view3"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
             android:src="@drawable/newyear"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view7"
@@ -122,13 +128,12 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/view5"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view4"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
             android:src="@drawable/dayofdead"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view8"
@@ -136,13 +141,12 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/view3"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/view4"
             app:layout_constraintTop_toBottomOf="@+id/view5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
             android:src="@drawable/japan"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
         <ImageView
             android:id="@+id/view9"
@@ -150,25 +154,22 @@
             android:layout_height="@dimen/value100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintVertical_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/view5"
             app:layout_constraintTop_toBottomOf="@+id/view6"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintVertical_chainStyle="spread"
             android:src="@drawable/spain"
-            android:scaleType="centerCrop"
-            android:contentDescription="TODO" />
+            android:scaleType="centerCrop"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="@dimen/value215" />
+        app:layout_constraintGuide_end="215dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -177,74 +178,67 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_end="@dimen/value30" />
 
-
-
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardview"
-        android:layout_width="@dimen/value200"
-        android:layout_height="@dimen/value50"
-        app:layout_constraintBottom_toTopOf="@+id/date_text"
+        android:id="@+id/cardView"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline1"
+        app:layout_constraintTop_toBottomOf="@+id/CustomSearchView"
+        android:layout_marginTop="20dp"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/primary"
         app:cardCornerRadius="@dimen/value30">
 
         <Button
             android:id="@+id/date_picker"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/start_here_and_choose_the_date"
-            />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CustomSearchView"
+            android:text="@string/set_the_date"
+            android:stateListAnimator="@animator/anim_for_button"/>
 
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview2"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardview"
-        android:layout_marginTop="20dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:cardCornerRadius="30dp">
-
-        <Button
-            android:id="@+id/sendInTofrag"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="press"/>
-
-
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/date_text"
-        android:layout_width="@dimen/value200"
-        android:layout_height="@dimen/value50"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/push"
+        android:layout_width="135dp"
+        android:layout_height="135dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardview"
-        android:gravity="center"/>
-
-    <androidx.appcompat.widget.Toolbar
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:cornerRadius="90dp"
+        android:stateListAnimator="@animator/anim_for_button"
+        android:text="@string/PUSH"/>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/CustomToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_height="?attr/actionBarSize"
         android:layout_width="match_parent"
-        android:id="@+id/CustomToolbar"
-        android:background="@color/teal_700"
-        >
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="#A05DF1">
+        <ImageView
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:src="@drawable/photo"
+            android:layout_gravity="start"/>
+        <TextView
+            android:layout_height="40dp"
+            android:layout_width="200dp"
+            android:text="@string/app_name"
+            android:textSize="20sp"
+            android:gravity="center"/>
+    </com.google.android.material.appbar.MaterialToolbar>
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/CustomSearchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.appcompat.widget.SearchView>
-
-    </androidx.appcompat.widget.Toolbar>
-
+    </com.google.android.material.appbar.AppBarLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
